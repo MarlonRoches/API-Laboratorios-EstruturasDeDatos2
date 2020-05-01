@@ -19,17 +19,19 @@ namespace Lab_Reposición.Compresiones
             }
         }
 
-        public void CompresionLZW(List<string> Caracteres, string nombre)
+        public string CompresionLZW(List<string> Caracteres, string nombre,string _path)
         {
             int Iteracion = 0;
             string salida = "";  //cambiar por escritura del archivo
+            var path = _path;
             string W = "", K = "";
             var DiccionarioGeneral = ObetnerDiccionarioInicial();//poner como parametro el path global de data
             var DiccionarioWK = ObetnerDiccionarioInicial();
             var residuoEscritura = string.Empty;
             var diccionarioescrito = true;
+            var retorna = "";
             CompresionLZW();
-
+            return retorna;
             void CompresionLZW()
             {
                 Iteracion--;
@@ -83,9 +85,9 @@ namespace Lab_Reposición.Compresiones
 
             void EscribirDiccionario()
             {
-                string path = Directory.GetCurrentDirectory();
+                string path = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}";
 
-                var File = new FileStream($"{path}\\{nombre.Split('.')[0]}.lzw", FileMode.Append);
+                var File = new FileStream($"{path}_lzw.txt", FileMode.Create);
                 var writer = new StreamWriter(File);
                 if (diccionarioescrito)
                 {
@@ -102,7 +104,7 @@ namespace Lab_Reposición.Compresiones
             {
                 string path = Directory.GetCurrentDirectory();
 
-                var File = new FileStream($"{path}\\{nombre.Split('.')[0]}.lzw", FileMode.Append);
+                var File = new FileStream($"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}_lzw.txt", FileMode.Append);
                 var writer = new StreamWriter(File);
                 foreach (var item in salida)
                 {
@@ -110,6 +112,7 @@ namespace Lab_Reposición.Compresiones
                 }
                 writer.Close();
                 File.Close();
+                retorna = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}_lzw.txt";
             }
             Dictionary<string, int> ObetnerDiccionarioInicial()
             {
@@ -129,7 +132,7 @@ namespace Lab_Reposición.Compresiones
             }
         }
 
-        public void DescompresionLZW(List<string> Caracteres, string nombre)
+        public string DescompresionLZW(List<string> Caracteres, string nombre,string _path)
         {
             var DiccionarioDescompresion = new Dictionary<int, string>();
             var Iteracion = 0;
@@ -139,6 +142,7 @@ namespace Lab_Reposición.Compresiones
             int CodigoViejo = 0, CodigoNuevo = 0;
             string Cadena = string.Empty, Caracter = string.Empty;
             var Salida = string.Empty;
+            var vuela = ""; 
             while (!linea.Contains("END"))
             {
 
@@ -205,8 +209,8 @@ namespace Lab_Reposición.Compresiones
 
 
             //Escritura en archivo 
-            string pathDevuelta = Directory.GetCurrentDirectory();
-            var Decompress = new FileStream($"{pathDevuelta}\\Dec_{nombre.Split('.')[0]}.txt", FileMode.Create);
+            string pathDevuelta = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}_Decompress.txt".Replace("_lzw","");
+            var Decompress = new FileStream($"{pathDevuelta}", FileMode.Create);
             var writer = new StreamWriter(Decompress);
             for (int i = 0; i < Salida.Length; i++)
             {
@@ -219,6 +223,7 @@ namespace Lab_Reposición.Compresiones
             }
             writer.Close();
             Decompress.Close();
+            return pathDevuelta;
         }
 
     }

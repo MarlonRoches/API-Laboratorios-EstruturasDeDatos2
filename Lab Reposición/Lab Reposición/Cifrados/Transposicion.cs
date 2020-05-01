@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using System.Numerics;
 //lab 5
-namespace Lab_Reposición.Compresiones
+namespace Lab_Reposición.Cifrados
 {
     public class Transposicion
     {
@@ -87,6 +87,7 @@ namespace Lab_Reposición.Compresiones
             var Cifrado = new FileStream($"{Path.GetDirectoryName(GlobalPath)}\\{nombre}.txt", FileMode.Create);
             var writer = new StreamWriter(Cifrado);
             writer.Write(salida);
+            writer.Close();
             Cifrado.Close();
         }
 
@@ -324,7 +325,7 @@ namespace Lab_Reposición.Compresiones
             }
 
             //Escritura
-            var nombrearchivo = $"{Path.GetDirectoryName(decoded.Name)}\\{NonmbreArchivo}_ZigZag.txt";
+            var nombrearchivo = $"{Path.GetDirectoryName(decoded.Name)}\\{NonmbreArchivo}.txt";
             var encoded = new FileStream(nombrearchivo, FileMode.OpenOrCreate); //archivo
             var writer = new BinaryWriter(encoded);
             var codedtext = "";
@@ -384,7 +385,7 @@ namespace Lab_Reposición.Compresiones
             uncipher = uncipher.Replace('$', ' ');
 
 
-            var nombrearchivo = $"{Path.GetDirectoryName(Original.Name)}\\{NonmbreArchivo}_ZZD.txt".Replace("_ZigZag", "");
+            var nombrearchivo = $"{Path.GetDirectoryName(Original.Name)}\\{NonmbreArchivo}.txt";
             var decoded = new FileStream(nombrearchivo, FileMode.OpenOrCreate); //archivo
             var writer = new BinaryWriter(decoded);
             var codedtext = "";
@@ -426,8 +427,8 @@ namespace Lab_Reposición.Compresiones
             #region Variables De Acceso
             var Original = new FileStream(GlobalPath, FileMode.Open); //archivo
             var reader = new StreamReader(Original);
-            var nombrearchivo = $"{Path.GetDirectoryName(Original.Name)}\\Ces_{nombre}.txt";
-            var encoded = new FileStream(nombrearchivo, FileMode.OpenOrCreate); //archivo
+            var nombrearchivo = $"{Path.GetDirectoryName(Original.Name)}\\{nombre}.txt";
+            var encoded = new FileStream(nombrearchivo, FileMode.Create); //archivo
             var writer = new BinaryWriter(encoded);
 
             #endregion
@@ -475,9 +476,9 @@ namespace Lab_Reposición.Compresiones
 
             var Cifrado = new FileStream(GlobalPath, FileMode.Open); //archivo
             var reader = new StreamReader(Cifrado);
-            var nombrearchivo = $"{Path.GetDirectoryName(Cifrado.Name)}\\{nombre}_Des.txt".Replace("Ces_", "");
+            var nombrearchivo = $"{Path.GetDirectoryName(Cifrado.Name)}\\{nombre}.txt";
 
-            var decoded = new FileStream(nombrearchivo, FileMode.OpenOrCreate); //archivo
+            var decoded = new FileStream(nombrearchivo, FileMode.Create); //archivo
             var writer = new BinaryWriter(decoded);
 
 
