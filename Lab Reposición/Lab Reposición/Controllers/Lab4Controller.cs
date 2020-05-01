@@ -56,8 +56,8 @@ namespace Lab_Reposición.Controllers
             var d = File(memory, System.Net.Mime.MediaTypeNames.Application.Octet, Path.GetFileName(Data));
             return d;
         }
-        [HttpPost("Compresion/{tipo}")]
-        public async Task<IActionResult> Compresiones([FromForm]Upload file, string tipo)
+        [HttpPost("Compresion/{nombre}/{tipo}")]
+        public async Task<IActionResult> Compresiones([FromForm]Upload file,string nombre, string tipo)
         {
             var reader = new StreamReader(await SubirArchivo(file.file));
             var longitud = Convert.ToInt32(reader.BaseStream.Length);
@@ -84,7 +84,7 @@ namespace Lab_Reposición.Controllers
                 else if (tipo.ToLower() == "huff")
                 {
                     //huffman
-                    return Ok();
+                    return await DownloadAsync(ArbolHuffman.Instance.Compresion_Huffman(await SubirArchivo(file.file)));
                 }
                 else
                 {
@@ -92,8 +92,8 @@ namespace Lab_Reposición.Controllers
                 }
             }
         }
-        [HttpPost("Desompresion/{tipo}")]
-        public async Task<IActionResult> Descompresiones([FromForm]Upload file, string tipo)
+        [HttpPost("Desompresion/{nombre}/{tipo}")]
+        public async Task<IActionResult> Descompresiones([FromForm]Upload file, string tipo,string nombre)
         {
             var reader = new StreamReader(await SubirArchivo(file.file));
             var longitud = Convert.ToInt32(reader.BaseStream.Length);
@@ -118,7 +118,7 @@ namespace Lab_Reposición.Controllers
                 }
                 else if (tipo.ToLower() == "huff")
                 {
-                    //huffman
+                    return await DownloadAsync(ArbolHuffman.Instance.Descompresio_Huffman(await SubirArchivo(file.file)));
                     return Ok();
 
                 }

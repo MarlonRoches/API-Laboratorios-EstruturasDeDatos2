@@ -1,0 +1,59 @@
+Casos zig zag
+
+Cuando se ingresa m (contrasena incorrecta) y queda decimal
+
+	m div  
+	-Si el residuo queda mayor a 0.5 = bloques de derecha
+	a izquierda con mayor cantidad
+	-Si el residuo queda menor a 0.5 = bloques de izquierda
+	a derecha con mayor cantidad.
+
+
+SDES:
+
+ P10: 1234567890
+ P8: 39860127
+ P4: 1432
+ EP: 24134312 (Expandir y permutar P4)
+ IP: 02461357
+ XOR: comparar si son iguales, T = 0, F = 1
+ SWAP: cambiar bloque 1 al 2 y visceversa 
+	
+
+EJEMPLO
+llave de 10 bits = 837
+837 en binario = 1101000101
+
+1. P10 = 1101001001
+2. tomar bloques de 5  (11010)|(01001)
+3. Left shift 1 para c/u = (10101)|(10010)
+4. P8 a los 10: 00101010 ----->Key1
+
+5. Left shift 2 para los bloques de 5 = (10110)|(01010)
+6. P8 a los 10: 10111010 ----->Key2  
+
+----------------------------------------------------------
+
+Texto plano 8bits = 1byte
+El proceso por cada byte
+
+EJEMPLO
+L = en ascii = 76 = en binario = 01001100
+1. IP = 00101010
+2. tomar bloques de 4. ingnorar el primer bloque y agarrar el segundo = (0010)|(1010)
+3. EP del segundo bloque (1010) = 00110110
+4. XOR con Key1 (00101010) y (00110110) = 00011100
+5. separar en bloques de 4 = (0001)|(1100)
+6. s0box para bloque1 (0001) = 1,0 y s1box para bloque2 (1100) = 2,2  ----- en s0=11, en s1=01 ---- Fila=0,3 y Columna=1,2
+7. P4 a s0 y s1 = 1101
+8. XOR con primer bloque ignorado del paso 2 (0010) y paso7 (1101) =  1111
+9. Juntar resultado paso 8 (1111) con segundo bloque del paso2 (1010) = 11111010
+10. SWAP = 10101111
+11. EP bloque 2 del paso10 (1111) = 11111111
+12. XOR resultado paso11 (11111111)y Key2 (101111010) = 01000101
+13. s0box para bloque1 (0100) = 11, s1box para bloque2 (0101) = 01
+14. P4  para bloques unidos del paso13 (1101) = 1101
+15. XOR resultado paso14 con bloque1 del swap(paso10) (1010) = 0111
+16. Union paso15 + swap bloque2 (1111)= 01111111
+17. IP-1 del paso16 = 01111111
+18. convierto a binario paso17 = 127 y luego su caracter.  

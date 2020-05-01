@@ -22,47 +22,46 @@ namespace Lab_Reposición.Compresiones
         }
         #region Variables
 
-        List<NodoHuffman> Arbol = new List<NodoHuffman>();
-        private int bufferLength = 10000;
-         Dictionary<char, decimal> Letras = new Dictionary<char, decimal>();
-         List<NodoHuffman> DiccionarioPrefijos = new List<NodoHuffman>();
-        int cantidad_de_letras = 0;
-        int max = 0;
-        Dictionary<char, string> IndexID = new Dictionary<char, string>();
-        string GlobalPath = null;
-        string rutaAGuardar;
-         bool escrito;
-        Dictionary<byte, string> DicPrefijos = new Dictionary<byte, string>();
-        Dictionary<string, string> LetPrefijos = new Dictionary<string, string>();
+        List<NodoHuffman>               Arbol = new List<NodoHuffman>();
+        private int                      bufferLength = 10000;
+        Dictionary<char, decimal>       Letras = new Dictionary<char, decimal>();
+        List<NodoHuffman>               DiccionarioPrefijos = new List<NodoHuffman>();
+        int                             cantidad_de_letras = 0;
+        int                             max = 0;
+        Dictionary<char, string>        IndexID = new Dictionary<char, string>();
+        string                          GlobalPath = null;
+        string                          rutaAGuardar;
+        bool                            escrito;
+        Dictionary<char, string>        DicPrefijos = new Dictionary<char, string>();
+        private string rutadesalida;
+        Dictionary<string, string>      LetPrefijos = new Dictionary<string, string>();
         #endregion
 
         //C:\Users\roche\Desktop\BIBLIA COMPLETA.txt
         //C:\Users\roche\Desktop\Tea.txt
-        public void Compresion_Huffman(string _root)
+        public string Compresion_Huffman(string _root)
         {
             GlobalPath = _root;
             var file = new FileStream(GlobalPath, FileMode.OpenOrCreate);
-            var Lector = new BinaryReader(file);
-            var byteBuffer = new byte[bufferLength];//buffer
+            var Lector = new StreamReader(file);
+            var byteBuffer = Lector.ReadToEnd();//buffer
 
-            while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+
+            foreach (var Caracter in byteBuffer)
             {
-                byteBuffer = Lector.ReadBytes(bufferLength);
-                foreach (var Caracter in byteBuffer)
+                cantidad_de_letras++;
+                var car = (char)Caracter;
+                if (Letras.ContainsKey(car)) //si lo tiene
                 {
-                    cantidad_de_letras++;
-                    var car = (char)Caracter;
-                    if (Letras.ContainsKey(car)) //si lo tiene
-                    {
-                        Letras[car]++;
-                    }
-                    else// no lo tien
-                    {
-                        Letras.Add(car, 1);
-                    }
-                } //llenar el diccionario con la cantidad total de letras
+                    Letras[car]++;
+                }
+                else// no lo tien
+                {
+                    Letras.Add(car, 1);
+                }
+            } //llenar el diccionario con la cantidad total de letras
 
-            }
+
             var keys = Letras.Keys;
             var ArrayProbabilidades = new decimal[cantidad_de_letras];
             int num = 0;
@@ -85,6 +84,20 @@ namespace Lab_Reposición.Compresiones
             EscribirDiccionario();
             PrefijoMasGrande();
             ComprimirTexto();
+            Arbol = new List<NodoHuffman>();
+            bufferLength = 10000;
+            Letras = new Dictionary<char, decimal>();
+            DiccionarioPrefijos = new List<NodoHuffman>();
+            cantidad_de_letras = 0;
+            max = 0;
+            IndexID = new Dictionary<char, string>();
+            GlobalPath = "";
+            rutaAGuardar="";
+            escrito=false;
+            DicPrefijos = new Dictionary<char, string>();
+
+            LetPrefijos = new Dictionary<string, string>();
+            return rutadesalida;
         }
         void InsertarEnLaLista()
         {
@@ -104,7 +117,7 @@ namespace Lab_Reposición.Compresiones
                 DiccionarioPrefijos = Arbol.OrderBy(x => x.Probabilidad).ToList();
                 asignado = true;
             }
-            
+
             var n = 1;
             while (Arbol.Count != 1)
             {
@@ -128,7 +141,7 @@ namespace Lab_Reposición.Compresiones
                     NuevoPadre.Derecha.SoyIzquierda = false;
                 }
                 NuevoPadre.Probabilidad = NuevoPadre.Derecha.Probabilidad + NuevoPadre.Izquierda.Probabilidad;
-                
+
 
                 #endregion
                 Arbol.RemoveAt(0);
@@ -137,14 +150,14 @@ namespace Lab_Reposición.Compresiones
                 n++;
                 Arbol = Arbol.OrderBy(x => x.Probabilidad).ToList();
             }
-                Prefijos(Arbol[0],"");
-            
+            Prefijos(Arbol[0], "");
+
         }
-         void Prefijos(NodoHuffman _Actual, string prefijo)
+        void Prefijos(NodoHuffman _Actual, string prefijo)
         {
             if (_Actual.Derecha == null && _Actual.Izquierda == null)
             {
-                DicPrefijos.Add(_Actual.Nombre, prefijo);
+                DicPrefijos.Add((char)_Actual.Nombre, prefijo);
                 LetPrefijos.Add(((char)_Actual.Nombre).ToString(), prefijo);
             }
             else
@@ -161,11 +174,11 @@ namespace Lab_Reposición.Compresiones
 
             }
         }
-         void EscribirDiccionario()
+        void EscribirDiccionario()
         {
             var path = Path.GetDirectoryName(GlobalPath);
             var Name = Path.GetFileNameWithoutExtension(GlobalPath);
-            var file = new FileStream($"{path}\\Compressed_{Name}.huff",FileMode.OpenOrCreate);
+            var file = new FileStream($"{path}\\Huff_Compressed_{Name}.txt", FileMode.OpenOrCreate);
             var writer = new StreamWriter(file);
             foreach (var item in DicPrefijos)
             {
@@ -174,38 +187,46 @@ namespace Lab_Reposición.Compresiones
             writer.Write("END");//179│
             writer.Close();
             file.Close();
+            rutadesalida = $"{path}\\Huff_Compressed_{Name}.txt";
+
         }
-         void ComprimirTexto()
+        void ComprimirTexto()
         {
             var textocomprimido = string.Empty;
             var path = Path.GetDirectoryName(GlobalPath);
             var Name = Path.GetFileNameWithoutExtension(GlobalPath);
-            var Compressed = new FileStream($"{path}\\Compressed_{Name}.huff", FileMode.Append);
-            var writer = new BinaryWriter(Compressed);
+            var Compressed = new FileStream($"{path}\\Huff_Compressed_{Name}.txt", FileMode.Append);
+            var writer = new StreamWriter(Compressed);
             var DeCompressed = new FileStream(GlobalPath, FileMode.OpenOrCreate);
-            var Lector = new BinaryReader(DeCompressed);
-            var byteBuffer = new byte[bufferLength];//buffer
+            var Lector = new StreamReader(DeCompressed);
+            var byteBuffer = Lector.ReadToEnd();//buffer
             var x = string.Empty;
-            while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+            var ver = "";
+            foreach (var Caracter in byteBuffer)
             {
-                byteBuffer = Lector.ReadBytes(bufferLength);
-                foreach (var Caracter in byteBuffer)
+                x += DicPrefijos[Caracter];
+                ver += Caracter;
+                if (x.Length >= 8)
                 {
-                    x += DicPrefijos[Caracter];
-                    if (x.Length >= 8)
-                    {
-                        var bytewrt = (Char)String_A_Byte(x.Substring(0, 8));
-                        x = x.Remove(0, 8);
-                        textocomprimido += bytewrt;
-                         writer.Write(bytewrt);
-                    }
-                } 
-
+                    var bytewrt1 = (char)String_A_Byte(x.Substring(0, 8));
+                    x = x.Remove(0, 8);
+                    textocomprimido += bytewrt1;
+                }
             }
+            x = x.PadLeft(8, '0');
+            var bytewrt = (char)String_A_Byte(x);
+            x = x.Remove(0, 8);
+            textocomprimido += bytewrt;
+
+            writer.Write(textocomprimido);
+            writer.Close();
+            Lector.Close();
             DeCompressed.Close();
             Compressed.Close();
+            rutadesalida = $"{path}\\Huff_Compressed_{Name}.txt";
+
         }
-         void PrefijoMasGrande()
+        void PrefijoMasGrande()
         {
             foreach (var item in DicPrefijos)
             {
@@ -234,7 +255,7 @@ namespace Lab_Reposición.Compresiones
         }
 
 
-        public void Descompresio_Huffman(string _path)
+        public string Descompresio_Huffman(string _path)
         {
             var Reconstruido = new Dictionary<string, char>();
             GlobalPath = _path;
@@ -248,44 +269,78 @@ namespace Lab_Reposición.Compresiones
             {
                 diccionario += (char)((byte)CaracterActual);
                 CaracterActual = lector.Read();
-                cont ++;
+                cont++;
             }
-            position= diccionario.Replace("\r","").Length+1;
-            var RawDoc = diccionario.Replace("\r\n","").Replace("END","").Split('^');
-
+            position = diccionario.Replace("\r", "").Length + 1;
+            var RawDoc = diccionario.Replace("\r\n", "").Replace("END", "").Split('^');
+            var textocompreso = "";
+            while (!lector.EndOfStream)
+            {
+                textocompreso += (char)CaracterActual;
+                CaracterActual = lector.Read();
+            }
+            textocompreso += (char)CaracterActual;
             foreach (var item in RawDoc)
             {
-                if (item =="")
+                if (item == "")
                 {
                     break;
                 }
                 var splited = item.Split('|');
-                Reconstruido.Add(splited[1],(char)(byte)int.Parse(splited[0]));
+                if (splited[0] == "")
+                {
+                    Reconstruido.Add(splited[1], '|');
+
+                }
+                else
+                {
+                    Reconstruido.Add(splited[1], (char)(byte)splited[0][0]);
+
+                }
             }
-            
             var path = Path.GetDirectoryName(GlobalPath); var descompreso = string.Empty;
-            var Name = Path.GetFileNameWithoutExtension(GlobalPath);            var actual = string.Empty;
-              var decompresofile = new FileStream($"{path}\\DesComp_{Name}.txt", FileMode.Create);
+            var Name = Path.GetFileNameWithoutExtension(GlobalPath);
+            var actual = string.Empty;
+            var decompresofile = new FileStream($"{path}\\DesComp_{Name}.txt".Replace("Huff_Compressed_", ""), FileMode.Create);
             var writer = new BinaryWriter(decompresofile);
-            
-            while (cont != lector.BaseStream.Length)
+            var salida = "";
+            foreach (var item in textocompreso)
             {
-                actual += Convert.ToString(CaracterActual ,2).PadLeft(8, '0');
+                actual += Convert.ToString(item, 2).PadLeft(8, '0');
+
+            }
+            while (actual != "")
+            {
+
                 for (int i = 0; i < actual.Length; i++)
                 {
                     var x = actual.Substring(0, i);
                     if (Reconstruido.ContainsKey(x))
                     {
+                        if (actual.Length < 8)
+                        {
+                            actual = "";
+                            break;
+                        }
                         writer.Write(Reconstruido[x]);
+                        salida += Reconstruido[x];
                         actual = actual.Remove(0, i);
                     }
+                    else
+                    {
+                        if (actual.Length < 8)
+                        {
+                            actual = "";
+                            break;
+                        }
+                    }
                 }
-                cont++;
-                CaracterActual = lector.Read();
             }
             writer.Close();
             file.Close();
             lector.Close();
+            return $"{path}\\DesComp_{Name}.txt".Replace("Huff_Compressed_", "");
+
         }
 
     }

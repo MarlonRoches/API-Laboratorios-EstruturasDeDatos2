@@ -1,0 +1,31 @@
+sabado 2 DE MAYO 
+Bota nota de Estructuras
+LZW
+HUFFMAN
+RSA
+Cifrados
+Final de lenguajes
+Repasar ultimas hojas de trabajo
+
+Lunes 4
+Final de Desarrollo CFI
+Ensayo del desarrollo humano
+
+Martes Mayo 5
+Final de Fisica
+conservación de la energía, conservación del momento, colisiones y centro de masa
+
+Miercolds May 6
+Final Exam
+Unit  6
+Reported Speech
+Final Estructuras
+
+
+sabado 9 de mayo
+ Proyecto Estructuras
+{
+un arbol para productos
+Un arbol para Sucursales
+Compresion con llave
+}
