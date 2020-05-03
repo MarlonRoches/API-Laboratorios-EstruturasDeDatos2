@@ -1,0 +1,11 @@
+{
+	//Ruta,Cesar,Zigzag
+	"Algoritmo":"Ruta",
+	"LlaveCesar":"Quesio",
+	"Carriles":5,
+	"m":3,
+	//dupla donde el primero indica la escritura en la matriz y el segundo la lectura, ver-hor seria como escribe vartical y el cifrado es horizontal, igual para el horario y antihorario  donde (horario-x, y anti-x son las diplas respectivas para el cifrado)
+	"Direccion":"hor-ver",
+	"Path":"C:\\Users\\roche\\Desktop\\Pepito.txt",
+	"Nombre":"Original"
+}
