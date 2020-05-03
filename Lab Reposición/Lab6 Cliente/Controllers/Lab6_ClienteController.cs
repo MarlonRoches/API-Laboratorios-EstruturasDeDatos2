@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Lab_Reposición.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
+using Lab6_Cliente.Models;
+using System.Text;
 
-namespace Lab_Reposición.Controllers
+namespace Lab6_Cliente
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteController : ControllerBase
+    public class Lab6_ClienteController : ControllerBase
     {
+
         static string PublicKey;
         static string PrivateKey;
         static string N;
         static bool Llave = false;
+        [HttpGet]
+        public string Get()
+        {
+            return "Lab6, Cliente";
+        }
         [HttpGet("getPublicKey")]
         public string Inicio([FromBody] object Json)
         {
@@ -100,5 +105,6 @@ namespace Lab_Reposición.Controllers
             }
 
         }
+
     }
 }

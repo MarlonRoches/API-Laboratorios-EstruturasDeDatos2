@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-//lab 4
-namespace Lab_Reposición.Compresiones
+
+namespace Lab_Reposición.Models
 {
     class LWZ_API
     {
@@ -19,7 +18,7 @@ namespace Lab_Reposición.Compresiones
             }
         }
 
-        public string CompresionLZW(List<string> Caracteres, string nombre,string _path)
+        public string CompresionLZW(List<string> Caracteres, string nombre, string _path)
         {
             int Iteracion = 0;
             string salida = "";  //cambiar por escritura del archivo
@@ -85,7 +84,7 @@ namespace Lab_Reposición.Compresiones
 
             void EscribirDiccionario()
             {
-                string path = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}";
+                string path = $"{Path.GetDirectoryName(_path)}\\{nombre}";
 
                 var File = new FileStream($"{path}_lzw.txt", FileMode.Create);
                 var writer = new StreamWriter(File);
@@ -132,7 +131,7 @@ namespace Lab_Reposición.Compresiones
             }
         }
 
-        public string DescompresionLZW(List<string> Caracteres, string nombre,string _path)
+        public string DescompresionLZW(List<string> Caracteres, string _path)
         {
             var DiccionarioDescompresion = new Dictionary<int, string>();
             var Iteracion = 0;
@@ -142,7 +141,7 @@ namespace Lab_Reposición.Compresiones
             int CodigoViejo = 0, CodigoNuevo = 0;
             string Cadena = string.Empty, Caracter = string.Empty;
             var Salida = string.Empty;
-            var vuela = ""; 
+            var vuela = "";
             while (!linea.Contains("END"))
             {
 
@@ -209,7 +208,7 @@ namespace Lab_Reposición.Compresiones
 
 
             //Escritura en archivo 
-            string pathDevuelta = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}_Decompress.txt".Replace("_lzw","");
+            string pathDevuelta = $"{Path.GetDirectoryName(_path)}\\{Path.GetFileNameWithoutExtension(_path)}_Decompress.txt".Replace("_lzw", "");
             var Decompress = new FileStream($"{pathDevuelta}", FileMode.Create);
             var writer = new StreamWriter(Decompress);
             for (int i = 0; i < Salida.Length; i++)
@@ -227,4 +226,5 @@ namespace Lab_Reposición.Compresiones
         }
 
     }
+
 }

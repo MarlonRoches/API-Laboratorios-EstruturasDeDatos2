@@ -1,6 +1,6 @@
 using System;
 
-namespace Cliente_Lab_6
+namespace Lab6_Cliente
 {
     public class WeatherForecast
     {

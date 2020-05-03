@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Lab_Reposición.Models;
 
-namespace Backend.Controllers
+namespace Lab_Reposición.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BackendController : ControllerBase
+    public class Lab6_BackendController : ControllerBase
     {
         [HttpPost("CifrarCesar")]
         public void CifrarArchivoPriv([FromBody] object Json)
@@ -20,8 +21,8 @@ namespace Backend.Controllers
             var Entrada = JsonConvert.DeserializeObject<Input>(Json.ToString());
             if (Entrada.LlavePublica == null)
             {
-            var CesarKey = RSA.Instance.RSA_Uncipher(int.Parse(Entrada.LlavePrivada), int.Parse(Entrada.N),Entrada.LlaveCesar);
-            CifrarCesar(CesarKey, Entrada.Ruta, Entrada.NombreArchivo);
+                var CesarKey = RSA.Instance.RSA_Uncipher(int.Parse(Entrada.LlavePrivada), int.Parse(Entrada.N), Entrada.LlaveCesar);
+                CifrarCesar(CesarKey, Entrada.Ruta, Entrada.NombreArchivo);
 
             }
             else

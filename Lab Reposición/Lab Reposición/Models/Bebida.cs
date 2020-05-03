@@ -7,7 +7,6 @@ namespace Lab_Reposición.Models
 {
     public class Bebida
     {
-
         public string Nombre { get; set; }
         public string Sabor { get; set; }
         public string Casa { get; set; }

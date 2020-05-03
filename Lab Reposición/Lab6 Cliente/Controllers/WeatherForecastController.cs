@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Cliente_Lab_6.Controllers
+namespace Lab6_Cliente.Controllers
 {
     [ApiController]
     [Route("[controller]")]

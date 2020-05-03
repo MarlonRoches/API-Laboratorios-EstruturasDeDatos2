@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Cliente_Lab_6
+namespace Lab6_Cliente
 {
     public class Program
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Lab_Reposición.Models
+namespace Lab6_Cliente.Models
 {
     public class Input
     {

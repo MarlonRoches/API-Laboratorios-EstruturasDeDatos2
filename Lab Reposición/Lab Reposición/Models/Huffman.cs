@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
-using Lab_Reposición.Models;
-using System.Web;
-using System.Text;
-//lab 3
-namespace Lab_Reposición.Compresiones
+
+namespace Lab_Reposición.Models
 {
     public class ArbolHuffman
     {
@@ -22,24 +19,24 @@ namespace Lab_Reposición.Compresiones
         }
         #region Variables
 
-        List<NodoHuffman>               Arbol = new List<NodoHuffman>();
-        private int                      bufferLength = 10000;
-        Dictionary<char, decimal>       Letras = new Dictionary<char, decimal>();
-        List<NodoHuffman>               DiccionarioPrefijos = new List<NodoHuffman>();
-        int                             cantidad_de_letras = 0;
-        int                             max = 0;
-        Dictionary<char, string>        IndexID = new Dictionary<char, string>();
-        string                          GlobalPath = null;
-        string                          rutaAGuardar;
-        bool                            escrito;
-        Dictionary<char, string>        DicPrefijos = new Dictionary<char, string>();
+        List<NodoHuffman> Arbol = new List<NodoHuffman>();
+        private int bufferLength = 10000;
+        Dictionary<char, decimal> Letras = new Dictionary<char, decimal>();
+        List<NodoHuffman> DiccionarioPrefijos = new List<NodoHuffman>();
+        int cantidad_de_letras = 0;
+        int max = 0;
+        Dictionary<char, string> IndexID = new Dictionary<char, string>();
+        string GlobalPath = null;
+        string rutaAGuardar;
+        bool escrito;
+        Dictionary<char, string> DicPrefijos = new Dictionary<char, string>();
         private string rutadesalida;
-        Dictionary<string, string>      LetPrefijos = new Dictionary<string, string>();
+        Dictionary<string, string> LetPrefijos = new Dictionary<string, string>();
         #endregion
 
         //C:\Users\roche\Desktop\BIBLIA COMPLETA.txt
         //C:\Users\roche\Desktop\Tea.txt
-        public string Compresion_Huffman(string _root)
+        public string Compresion_Huffman(string _root,string nombrenuevo)
         {
             GlobalPath = _root;
             var file = new FileStream(GlobalPath, FileMode.OpenOrCreate);
@@ -81,9 +78,9 @@ namespace Lab_Reposición.Compresiones
             Letras = DiccionarioAuxiliar;
             file.Close();//cerramos coneccion con archivo
             InsertarEnLaLista();
-            EscribirDiccionario();
+            EscribirDiccionario(nombrenuevo);
             PrefijoMasGrande();
-            ComprimirTexto();
+            ComprimirTexto(nombrenuevo);
             Arbol = new List<NodoHuffman>();
             bufferLength = 10000;
             Letras = new Dictionary<char, decimal>();
@@ -92,8 +89,8 @@ namespace Lab_Reposición.Compresiones
             max = 0;
             IndexID = new Dictionary<char, string>();
             GlobalPath = "";
-            rutaAGuardar="";
-            escrito=false;
+            rutaAGuardar = "";
+            escrito = false;
             DicPrefijos = new Dictionary<char, string>();
 
             LetPrefijos = new Dictionary<string, string>();
@@ -174,11 +171,11 @@ namespace Lab_Reposición.Compresiones
 
             }
         }
-        void EscribirDiccionario()
+        void EscribirDiccionario(string Nombre)
         {
             var path = Path.GetDirectoryName(GlobalPath);
             var Name = Path.GetFileNameWithoutExtension(GlobalPath);
-            var file = new FileStream($"{path}\\Huff_Compressed_{Name}.txt", FileMode.OpenOrCreate);
+            var file = new FileStream($"{path}\\Huff_{Nombre}.txt", FileMode.OpenOrCreate);
             var writer = new StreamWriter(file);
             foreach (var item in DicPrefijos)
             {
@@ -190,12 +187,12 @@ namespace Lab_Reposición.Compresiones
             rutadesalida = $"{path}\\Huff_Compressed_{Name}.txt";
 
         }
-        void ComprimirTexto()
+        void ComprimirTexto(string Nombre)
         {
             var textocomprimido = string.Empty;
             var path = Path.GetDirectoryName(GlobalPath);
             var Name = Path.GetFileNameWithoutExtension(GlobalPath);
-            var Compressed = new FileStream($"{path}\\Huff_Compressed_{Name}.txt", FileMode.Append);
+            var Compressed = new FileStream($"{path}\\Huff_{Nombre}.txt", FileMode.Append);
             var writer = new StreamWriter(Compressed);
             var DeCompressed = new FileStream(GlobalPath, FileMode.OpenOrCreate);
             var Lector = new StreamReader(DeCompressed);
@@ -223,7 +220,7 @@ namespace Lab_Reposición.Compresiones
             Lector.Close();
             DeCompressed.Close();
             Compressed.Close();
-            rutadesalida = $"{path}\\Huff_Compressed_{Name}.txt";
+            rutadesalida = $"{path}\\Huff_{Name}.txt";
 
         }
         void PrefijoMasGrande()
@@ -301,7 +298,7 @@ namespace Lab_Reposición.Compresiones
             var path = Path.GetDirectoryName(GlobalPath); var descompreso = string.Empty;
             var Name = Path.GetFileNameWithoutExtension(GlobalPath);
             var actual = string.Empty;
-            var decompresofile = new FileStream($"{path}\\DesComp_{Name}.txt".Replace("Huff_Compressed_", ""), FileMode.Create);
+            var decompresofile = new FileStream($"{path}\\DesComp_{Name}.txt".Replace("Huff_", ""), FileMode.Create);
             var writer = new BinaryWriter(decompresofile);
             var salida = "";
             foreach (var item in textocompreso)
@@ -344,4 +341,5 @@ namespace Lab_Reposición.Compresiones
         }
 
     }
+
 }

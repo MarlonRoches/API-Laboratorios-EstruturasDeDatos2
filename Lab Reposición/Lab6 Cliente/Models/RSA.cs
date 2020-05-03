@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Reposición.Models
+namespace Lab6_Cliente.Models
 {
     class RSA
     {
@@ -118,4 +116,5 @@ namespace Lab_Reposición.Models
 
         #endregion
     }
+
 }

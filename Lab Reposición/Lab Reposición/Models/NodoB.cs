@@ -18,7 +18,6 @@ namespace Lab_Reposición.Models
             Datos = new Bebida[_grado - 1];
             Hijos = new NodoB[_grado];
             Grado = _grado;
-
         }
     }
 }

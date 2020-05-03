@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-namespace Lab_Reposición.Models
+using Lab_Reposición.Models;
+using Lab_Reposición.Data;
+namespace Lab_Reposición.Data
 {
     public class Singleton
     {
