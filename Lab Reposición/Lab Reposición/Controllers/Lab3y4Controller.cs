@@ -85,7 +85,7 @@ namespace Lab_Reposición.Controllers
                 if (tipo.ToLower() == "lzw")
                 {
 
-                    LWZ_API.Instance.DescompresionLZW(listabytes, nombre, entrada.FilePath);
+                    LWZ_API.Instance.DescompresionLZW(listabytes, entrada.FilePath);
                     return Ok();
                 }
                 else if (tipo.ToLower() == "huff")

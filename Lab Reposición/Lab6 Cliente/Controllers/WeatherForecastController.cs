@@ -13,7 +13,7 @@ namespace Lab6_Cliente.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Back", "Back", "Chilly", "Back", "Back", "Back", "Back", "Back", "Back", "Back"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;

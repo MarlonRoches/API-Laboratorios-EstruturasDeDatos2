@@ -12,7 +12,7 @@ namespace Lab_Reposición.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CifradosController : ControllerBase
+    public class Lab5Controller : ControllerBase
     {
         [HttpGet]
         public string Get()
@@ -20,11 +20,11 @@ namespace Lab_Reposición.Controllers
             return "Lab5, Cifrados";
         }
         [HttpPost]
-        [Route("Cifrar")]
-        public void Cifrar([FromBody]object json)
+        [Route("cipher/{tipo}")]
+        public void Cifrar([FromBody]object json,string tipo)
         {
             var x = JsonConvert.DeserializeObject<Entrada>(json.ToString());
-            switch (x.Algoritmo.ToLower())
+            switch (tipo.ToLower())
             {
                 case "cesar":
                     Cifrados.Instance.CifrarCesar(x.LlaveCesar, x.Path, x.Nombre);
@@ -33,15 +33,15 @@ namespace Lab_Reposición.Controllers
                     Cifrados.Instance.CifrarRail(x.Carriles, x.Path, x.Nombre);
                     break;
                 case "ruta":
-                    Cifrados.Instance.Ruta(x.m, x.Direccion, x.Path, x.Nombre);
+                    Cifrados.Instance.CifrarRuta(x.m, x.Direccion, x.Path, x.Nombre);
                     break;
                 default:
                     break;
             }
         }
         [HttpPost]
-        [Route("Decifrar")]
-        public void Decifrar([FromBody]object json)
+        [Route("decipher/{tipo}")]
+        public void Decifrar([FromBody]object json, string tipo)
         {
             var x = JsonConvert.DeserializeObject<Entrada>(json.ToString());
             switch (x.Algoritmo.ToLower())
@@ -53,7 +53,7 @@ namespace Lab_Reposición.Controllers
                     Cifrados.Instance.DecifrarRail(x.Carriles, x.Path, x.Nombre);
                     break;
                 case "ruta":
-                    Cifrados.Instance.Ruta(x.m, x.Direccion, x.Path, x.Nombre);
+                    Cifrados.Instance.DecifrarRuta(x.m, x.Direccion, x.Path, x.Nombre);
                     break;
                 default:
                     break;

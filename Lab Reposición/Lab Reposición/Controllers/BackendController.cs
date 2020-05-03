@@ -13,7 +13,7 @@ namespace Lab_Reposición.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Lab6_BackendController : ControllerBase
+    public class BackendController : ControllerBase
     {
         [HttpPost("CifrarCesar")]
         public void CifrarArchivoPriv([FromBody] object Json)
@@ -147,6 +147,8 @@ namespace Lab_Reposición.Controllers
             {
                 writer.Write(item);
             }
+            writer.Close();
+            decoded.Close();
         }
         Dictionary<char, int> LlenarAlfabeto_Cifrado()
         {

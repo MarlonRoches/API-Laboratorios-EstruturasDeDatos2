@@ -36,7 +36,7 @@ namespace Lab_Reposición.Models
 
             #region Ruta
 
-            public void Ruta(int m, string tipo, string _Path, string nombre)
+            public void CifrarRuta(int m, string tipo, string _Path, string nombre)
             {
                 GlobalPath = _Path;
                 var File = new FileStream(GlobalPath, FileMode.Open);
@@ -86,14 +86,63 @@ namespace Lab_Reposición.Models
                 var Cifrado = new FileStream($"{Path.GetDirectoryName(GlobalPath)}\\{nombre}.txt", FileMode.Create);
                 var writer = new StreamWriter(Cifrado);
                 writer.Write(salida);
+            writer.Close();
+                Cifrado.Close();
+            }
+            public void DecifrarRuta(int m, string tipo, string _Path, string nombre)
+            {
+                GlobalPath = _Path;
+                var File = new FileStream(GlobalPath, FileMode.Open);
+                var reader = new StreamReader(File);
+                var raw_text = reader.ReadToEnd();
+                var salida = string.Empty;
+                var n = 0;
+
+                while ((n * m) < raw_text.Length)
+                {
+                    n++;
+                }
+                File.Close();
+                switch (tipo.ToLower())
+                {
+                    case "ver-hor":
+                        salida = Vertical_a_Horizontal(raw_text, m, n);
+                        break;
+
+                    case "ver-ver":
+                        salida = raw_text;
+                        break;
+
+                    case "hor-ver":
+                        salida = Horizontal_a_Vertical(raw_text, m, n);
+                        break;
+                    case "hor-hor":
+                        salida = raw_text;
+                        break;
+
+                    case "horario-hor":
+                        salida = LecturaHoraria(raw_text, m, n, true);
+                        break;
+
+                    case "horario-der":
+                        salida = LecturaHoraria(raw_text, m, n, false);
+                        break;
+
+                    case "anti-der":
+                        break;
+
+                    case "anti-izq":
+                        break;
+                    default:
+                        break;
+                }
+                var Cifrado = new FileStream($"{Path.GetDirectoryName(GlobalPath)}\\{nombre}.txt", FileMode.Create);
+                var writer = new StreamWriter(Cifrado);
+                writer.Write(salida);
+            writer.Close();
                 Cifrado.Close();
             }
 
-            public void DecifrarRuta(int m, int n, bool tipo, bool Horario, bool Horizontal, string _Path)
-            {
-                GlobalPath = _Path;
-
-            }
             public string Horizontal_a_Vertical(string Texto, int m, int n)
             {
                 var i = 0;

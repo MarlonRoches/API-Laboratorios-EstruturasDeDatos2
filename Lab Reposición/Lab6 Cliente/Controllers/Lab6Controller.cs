@@ -9,26 +9,22 @@ using Newtonsoft.Json;
 using Lab6_Cliente.Models;
 using System.Text;
 
-namespace Lab6_Cliente
+namespace Lab_Reposición.Models
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Lab6_ClienteController : ControllerBase
+    public class Lab6Controller : ControllerBase
     {
 
         static string PublicKey;
         static string PrivateKey;
         static string N;
         static bool Llave = false;
-        [HttpGet]
-        public string Get()
-        {
-            return "Lab6, Cliente";
-        }
+        
         [HttpGet("getPublicKey")]
         public string Inicio([FromBody] object Json)
         {
-            return "Lab #6 RSA";
+            return "Lab #6 RSA Cliente";
         }
         [HttpPost("getPublicKey")]
         public string GetPublicKey([FromBody] object Json)
@@ -43,7 +39,6 @@ namespace Lab6_Cliente
             Llave = true;
             return $"Llave Publica: {Keys[0]}, N: {Keys[2]}";
         }
-        [HttpPost("getPrivateKey")]
 
         [HttpPost("CifrarArchivo")]
         public async Task<string> CifrarArchivoConPublicaAsync([FromBody] object Json)
@@ -63,7 +58,7 @@ namespace Lab6_Cliente
                 var cliente = new HttpClient();
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var respose = await cliente.PostAsync("https://localhost:44384/api/Backend/CifrarCesar", content);
+                var respose = await cliente.PostAsync("https://localhost:44330/api/Backend/CifrarCesar", content);
 
                 return $"Ok";
 
@@ -93,7 +88,7 @@ namespace Lab6_Cliente
                 var cliente = new HttpClient();
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var respose = await cliente.PostAsync("https://localhost:44384/api/Backend/DecifrarCesar", content);
+                var respose = await cliente.PostAsync("https://localhost:44330/api/Backend/DecifrarCesar", content);
 
                 return $"Ok";
 
